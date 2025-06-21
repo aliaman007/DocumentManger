@@ -1,5 +1,7 @@
 package com.main.docmanager.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +17,7 @@ import com.main.docmanager.service.DocumentService;
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentController {
-
+    private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
     @Autowired
     private DocumentService documentService;
 
@@ -25,7 +27,8 @@ public class DocumentController {
             Document document = documentService.upload(file, author);
             return ResponseEntity.ok(document);
         } catch (Exception ex) {
-            throw ex;
+        	logger.error("Exception occured while uploading the document ",ex.getMessage());
+        	throw ex;
         }
     
     }
@@ -35,6 +38,7 @@ public class DocumentController {
             Document document = documentService.delete(id);
             return ResponseEntity.ok(document);
         } catch (Exception ex) {
+        	logger.error("Exception occured while deleting the document with id"+id+"-->",ex.getMessage());
             throw ex;
         }
     }
