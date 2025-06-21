@@ -21,11 +21,12 @@ public class Document {
     private Long id;
 
     private String title;
+    @Column(name="file_type")
     private String fileType;
     private String author;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name="uploaded_at",updatable = false)
     private LocalDateTime uploadedAt;
 
     @Column(columnDefinition = "TEXT")

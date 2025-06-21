@@ -1,10 +1,12 @@
 
 package com.main.docmanager.service;
 
-import com.main.docmanager.model.Document;
-import com.main.docmanager.model.User;
-import com.main.docmanager.repository.DocumentRepository;
-import com.main.docmanager.repository.UserRepository;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Optional;
+
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
@@ -15,21 +17,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import com.main.docmanager.constants.ConstantsUtil;
+import com.main.docmanager.model.Document;
+import com.main.docmanager.model.User;
+import com.main.docmanager.repository.DocumentRepository;
+import com.main.docmanager.repository.UserRepository;
 
 @Service
 public class DocumentService {
 
-    private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList(
-            "application/pdf",
-            "text/plain",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    );
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+   
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -81,10 +78,10 @@ public class DocumentService {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty or not provided");
         }
-        if (file.getSize() > MAX_FILE_SIZE) {
+        if (file.getSize() >ConstantsUtil.MAX_FILE_SIZE) {
             throw new IllegalArgumentException("File size exceeds 10MB limit");
         }
-        if (!ALLOWED_FILE_TYPES.contains(file.getContentType())) {
+        if (!ConstantsUtil.ALLOWED_FILE_TYPES.contains(file.getContentType())) {
             throw new IllegalArgumentException("Unsupported file type: " + file.getContentType());
         }
     }
@@ -94,4 +91,14 @@ public class DocumentService {
         multipartFile.transferTo(tempFile);
         return tempFile;
     }
+
+	public Document delete(Long id) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		Optional<Document> d=documentRepository.findById(id);
+		if(d.isEmpty()) {
+			throw new FileNotFoundException();
+		}
+		 documentRepository.deleteById(id);
+		 return d.get();
+	}
 }
