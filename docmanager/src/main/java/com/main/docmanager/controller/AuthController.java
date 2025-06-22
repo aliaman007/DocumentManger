@@ -70,7 +70,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String jwt = jwtUtil.generateToken(userDetails);
         logger.info("Login successful for user: {}", request.username());
-        return ResponseEntity.ok(new LoginResponse(jwt));
+        return ResponseEntity.ok(new LoginResponse(jwt,request.username()));
     }
 
     @PostMapping("/logout")

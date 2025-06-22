@@ -48,7 +48,7 @@ public class QaService {
 
     	return documentRepository.findByFilters(author, fileType, parsedFromDate, parsedToDate, pageable);
     }
-    private String generateSnippet(String content, String keyword, int contextLength) {
+    public String generateSnippet(String content, String keyword, int contextLength) {
         if (content == null || keyword == null || content.isEmpty() || keyword.isEmpty()) {
             return "";
         }
@@ -66,7 +66,7 @@ public class QaService {
         String snippet = (start > 0 ? "..." : "") + content.substring(start, end) + (end < content.length() ? "..." : "");
         return snippet;
     }
-    private LocalDateTime parseDateTime(String dateTimeStr, String paramName) {
+    public LocalDateTime parseDateTime(String dateTimeStr, String paramName) {
         if (dateTimeStr == null || dateTimeStr.isBlank()) {
 //            logger.debug("{} is null or blank: {}", paramName, dateTimeStr);
             return null;

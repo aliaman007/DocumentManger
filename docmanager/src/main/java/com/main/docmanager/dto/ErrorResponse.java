@@ -1,20 +1,20 @@
+
 package com.main.docmanager.dto;
 
-
-
 public class ErrorResponse {
-    private String message;
-    private String details;
-    private long timestamp;
+    private final String error;
+    private final String message;
 
-    public ErrorResponse(String message, String details) {
+    public ErrorResponse(String error, String message) {
+        this.error = error;
         this.message = message;
-        this.details = details;
-        this.timestamp = System.currentTimeMillis();
     }
 
-    // Getters
-    public String getMessage() { return message; }
-    public String getDetails() { return details; }
-    public long getTimestamp() { return timestamp; }
+    public String getError() {
+        return error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

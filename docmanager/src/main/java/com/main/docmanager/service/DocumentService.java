@@ -71,7 +71,7 @@ public class DocumentService {
         }
     }
 
-    private void validateFile(MultipartFile file) {
+    public void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty or not provided");
         }
@@ -83,7 +83,7 @@ public class DocumentService {
         }
     }
 
-    private File createTempFile(MultipartFile multipartFile) throws IOException {
+    public File createTempFile(MultipartFile multipartFile) throws IOException {
         File tempFile = File.createTempFile("tika-", multipartFile.getOriginalFilename());
         multipartFile.transferTo(tempFile);
         return tempFile;

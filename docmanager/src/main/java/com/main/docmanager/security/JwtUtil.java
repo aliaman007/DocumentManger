@@ -91,7 +91,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+     Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
                     .setSigningKey(getSigningKey())
@@ -104,7 +104,7 @@ public class JwtUtil {
         }
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         try {
             return extractClaim(token, Claims::getExpiration).before(new Date());
         } catch (JwtException e) {
