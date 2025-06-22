@@ -49,6 +49,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Operation(summary = "Register user here")
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         logger.debug("Registering user: {}", request.username());
@@ -92,6 +93,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponse(jwt,request.username()));
     }
 
+    @Operation(summary = "Logout and flush JWT token")
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         logger.debug("User logout requested");

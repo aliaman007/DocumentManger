@@ -16,6 +16,8 @@ import com.main.docmanager.dto.SearchResultDTO;
 import com.main.docmanager.model.Document;
 import com.main.docmanager.service.QaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/documents")
 public class QaController {
@@ -23,7 +25,7 @@ public class QaController {
 	 @Autowired
 	    private QaService qaService;
 	 
-//	 @Operation(summary = "Search documents by query")
+	 @Operation(summary = "Search documents by query")
 	    @GetMapping("/search")
 	    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	    public ResponseEntity<List<SearchResultDTO>> search(
@@ -31,7 +33,7 @@ public class QaController {
 	        return ResponseEntity.ok(qaService.search(query, pageable));
 	    }
 
-//	    @Operation(summary = "Filter documents by metadata")
+	    @Operation(summary = "Filter documents by metadata")
 	    @GetMapping("/filter")
 	    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	    public ResponseEntity<Page<Document>> filter(@RequestParam(required = false) String author,
