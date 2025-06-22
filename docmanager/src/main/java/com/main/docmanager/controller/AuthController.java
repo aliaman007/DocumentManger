@@ -7,11 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.docmanager.dto.LoginRequest;
 import com.main.docmanager.dto.LoginResponse;
 import com.main.docmanager.dto.RegisterRequest;
-import com.main.docmanager.model.User;
-import com.main.docmanager.repository.UserRepository;
-import com.main.docmanager.security.JwtUtil;
+import com.main.docmanager.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,34 +31,14 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    private AuthService authservice;
+ 
 
     @Operation(summary = "Register user here")
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        logger.debug("Registering user: {}", request.username());
-        if (userRepository.findByUsername(request.username()).isPresent()) {
-            logger.warn("Username already exists: {}", request.username());
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        String role = request.role().startsWith("ROLE_") ? request.role() : "ROLE_" + request.role();
-        User user = new User(
-                request.username(),
-                passwordEncoder.encode(request.password()),
-                role
-        );
-        userRepository.save(user);
-        logger.info("User registered successfully: {}", request.username());
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) throws Exception {
+        logger.info("Registering user: {}", request.username());
+        return authservice.registerUser(request);
     }
 
     @Operation(summary = "Authenticate user and generate JWT", description = "Authenticates a user with username and password, returning a JWT token.")
@@ -83,14 +56,8 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        logger.debug("Authenticating user: {}", request.username());
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.username(), request.password())
-        );
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtUtil.generateToken(userDetails);
         logger.info("Login successful for user: {}", request.username());
-        return ResponseEntity.ok(new LoginResponse(jwt,request.username()));
+        return ResponseEntity.ok(authservice.login(request));
     }
 
     @Operation(summary = "Logout and flush JWT token")
