@@ -24,10 +24,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
-	    @Bean
-	    public PasswordEncoder passwordEncoder() {
-	        return new BCryptPasswordEncoder();
-	    }
+	
 	    @Autowired
 	    private JwtUtil jwtUtil;
 	    @Autowired
