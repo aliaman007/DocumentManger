@@ -1,27 +1,42 @@
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 1835
+    username:  'postgres'
+    password:  '1835'
     driver-class-name: org.postgresql.Driver
     hikari:
-      connection-timeout: 30000
+      connection-timeout: 30000 # 30 seconds
       maximum-pool-size: 10
-      max-lifetime: 1800000
-      initialization-fail-timeout: 0
+      max-lifetime: 1800000 # 30 minutes
+      initialization-fail-timeout: 0 # Disable fail-fast on startup
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update # Auto-create/update schema
+    show-sql: true # Log SQL queries
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  springdoc:
+    api-docs:
+      path: /api-docs # OpenAPI JSON endpoint
+    swagger-ui:
+      path: /swagger-ui.html # Swagger UI endpoint
+
 jwt:
   secret: 8f4a3b9c2d6e8f1a4b7c9d2e6f8a3b9c2d6e8f1a4b7c9d2e6f8a3b9c2d6e8f1a
   expiration: 3600 # 1 hour in seconds
-servlet:
-    multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
-      enabled: true
 
+logging:
+  level:
+    com.main.docmanager: DEBUG # Application-specific logging
+    org.hibernate.SQL: DEBUG # Log SQL statements
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Log SQL parameter bindings
+    org.springframework.security: DEBUG # Log security events
+    org.springframework.web: DEBUG # Log web requests
+    io.jsonwebtoken: DEBUG # Log JWT operations

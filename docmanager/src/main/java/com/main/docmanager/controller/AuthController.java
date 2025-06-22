@@ -24,6 +24,12 @@ import com.main.docmanager.model.User;
 import com.main.docmanager.repository.UserRepository;
 import com.main.docmanager.security.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,6 +67,19 @@ public class AuthController {
         return ResponseEntity.ok("User registered successfully");
     }
 
+    @Operation(summary = "Authenticate user and generate JWT", description = "Authenticates a user with username and password, returning a JWT token.")
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Authentication successful",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Invalid credentials",
+            content = @Content
+        )
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         logger.debug("Authenticating user: {}", request.username());

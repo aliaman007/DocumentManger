@@ -43,19 +43,27 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configuring SecurityFilterChain");
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> {
-                logger.debug("Setting up authorization rules");
-                auth
-                    .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
-                    .requestMatchers("/api/**").hasAuthority("ROLE_ADMIN")
-                    .anyRequest().authenticated();
-            })
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> {
+            logger.debug("Setting up authorization rules");
+            auth
+                .requestMatchers(
+                    "/api/auth/register", 
+                    "/api/auth/login", 
+                    "/api/auth/logout",
+                    "/v3/api-docs/**",      // OpenAPI JSON (default)
+                    "/api-docs/**",        // Custom OpenAPI JSON
+                    "/swagger-ui/**",      // Swagger UI resources
+                    "/swagger-ui.html"     // Swagger UI entry point
+                ).permitAll()
+                .requestMatchers("/api/**").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated();
+        })
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+    return http.build();
     }
 }
