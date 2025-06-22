@@ -2,8 +2,8 @@
 **Contains Instructions for local setup and deployement(Docker)**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-username/docmanager/actions)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/your-username/docmanager)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Coverage](https://img.shields.io/badge/coverage-75%25-brightgreen)](https://github.com/your-username/docmanager)
+
 
 A Spring Boot REST API for secure document management with JWT authentication, role-based access, and PostgreSQL storage. Administrators can upload and list documents, with interactive API documentation via Swagger UI.
 
