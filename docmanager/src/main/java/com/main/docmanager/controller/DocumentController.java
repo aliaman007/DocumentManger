@@ -71,6 +71,7 @@ public class DocumentController {
         }
     
     }
+    @Operation(summary = "For deleting the document")
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Document> delete(@RequestParam("id") Long id) throws Exception {
