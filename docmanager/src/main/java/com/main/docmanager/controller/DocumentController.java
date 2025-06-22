@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class DocumentController {
     private DocumentService documentService;
 
     @PostMapping("/upload")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Document> upload(@RequestParam("file") MultipartFile file, @RequestParam String author) throws Exception {
         try {
             Document document = documentService.upload(file, author);
@@ -33,6 +35,7 @@ public class DocumentController {
     
     }
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Document> delete(@RequestParam("id") Long id) throws Exception {
         try {
             Document document = documentService.delete(id);
